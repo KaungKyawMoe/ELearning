@@ -15,6 +15,10 @@ namespace Core.Controllers
         List<CourseDto> GetCourses();
 
         void CreateCourse(CourseDto _course);
+
+        CourseDto GetCourse(string id);
+
+        void UpdateCourse(CourseDto _course);
     }
 
     public class CourseController : ICourseController
@@ -34,6 +38,15 @@ namespace Core.Controllers
         public void CreateCourse(CourseDto _course)
         {
             _courseService.CreateCourse(_course);
+        }
+
+        public CourseDto GetCourse(String id)
+        {
+            return _courseService.GetCourse(id);
+        }
+        
+        public void UpdateCourse(CourseDto _course){
+            _courseService.UpdateCourse(_course);
         }
     }
 }

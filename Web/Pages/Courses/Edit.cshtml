@@ -1,63 +1,59 @@
 ﻿@page
-@model Web.Pages.Courses.CreateModel
+@model Web.Pages.Courses.EditModel
 @{
 }
 
-<section class="mx-auto align-content-center w-50">
-    <h1 class="text-center">Create Course</h1>
+<div class="align-content-center mx-auto w-50">
+    <h1>Edit</h1>
     <form method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="course.Id" hidden />
         <div class="row my-2">
-            <label class="col-sm-4">Name</label>
-            <div class="col-sm-8">
+            <label class="col-md-4 form-label" asp-for="course.Name"></label>
+            <div class="col-md-8">
                 <input type="text" class="form-control" asp-for="course.Name" />
                 <span asp-validation-for="course.Name" class="text-danger"></span>
             </div>
         </div>
 
         <div class="row my-2">
-            <label class="col-sm-4">Description</label>
-            <div class="col-sm-8">
+            <label class="col-md-4 form-label" asp-for="course.Description"></label>
+            <div class="col-md-8">
                 <input type="text" class="form-control" asp-for="course.Description" />
                 <span asp-validation-for="course.Description" class="text-danger"></span>
             </div>
         </div>
 
         <div class="row my-2">
-            <label class="col-sm-4">Fees</label>
-            <div class="col-sm-8">
+            <label class="col-md-4 form-label" asp-for="course.Fees"></label>
+            <div class="col-md-8">
                 <input type="text" class="form-control" asp-for="course.Fees" />
                 <span asp-validation-for="course.Fees" class="text-danger"></span>
             </div>
         </div>
 
         <div class="row my-2">
-            <label class="col-sm-4">Start Date</label>
-            <div class="col-sm-8">
+            <label class="col-md-4 form-label" asp-for="course.StartDate"></label>
+            <div class="col-md-8">
                 <input type="date" class="form-control" asp-for="course.StartDate" />
                 <span asp-validation-for="course.StartDate" class="text-danger"></span>
             </div>
         </div>
 
         <div class="row my-2">
-            <label class="col-sm-4">End Date</label>
-            <div class="col-sm-8">
+            <label class="col-md-4 form-label" asp-for="course.EndDate"></label>
+            <div class="col-md-8">
                 <input type="date" class="form-control" asp-for="course.EndDate" />
                 <span asp-validation-for="course.EndDate" class="text-danger"></span>
             </div>
         </div>
 
         <div class="row my-2">
-            <label class="col-sm-4"></label>
-            <div class="col-sm-8" style="max-width:150px;min-width:100px;">
-                <input type="submit" class="form-control" value="Save" />
+            <label class="col-md-4 form-label"></label>
+            <div class="col-md-8">
+                <input type="submit" class="btn btn-primary" value="Save" />
             </div>
         </div>
-    </form>
-</section>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+    </form>
+</div>

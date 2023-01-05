@@ -21,7 +21,7 @@ namespace Core.Repositories
 
         Task Create(TEntity entity);
 
-        Task Update(string id, TEntity entity);
+        Task Update(TEntity entity);
 
         Task Delete(string id);
     }
@@ -53,10 +53,10 @@ namespace Core.Repositories
 
         public async Task<TEntity> GetById(string id)
         {
-            return await _dbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync();
+            return await _dbContext.FindAsync<TEntity>(id);
         }
 
-        public async Task Update(string id, TEntity entity)
+        public async Task Update(TEntity entity)
         {
             _dbContext.Set<TEntity>().Update(entity);
             await _dbContext.SaveChangesAsync();

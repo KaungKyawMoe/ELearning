@@ -15,6 +15,7 @@
                         <th>Fees</th>
                         <th>Start Date</th>
                         <th>End Date</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,6 +27,9 @@
                             <td>@data.Fees MMK</td>
                             <td>@data.StartDate</td>
                             <td>@data.EndDate</td>
+                            <td>
+                            <a asp-page="./Edit" asp-route-id="@data.Id" > <span class=""></span>Edit</a> 
+                            </td>
                         </tr>
                     }
                 </tbody>

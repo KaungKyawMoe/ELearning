@@ -16,6 +16,10 @@ namespace Core.Services
         List<CourseDto> GetCourses();
 
         void CreateCourse(CourseDto course);
+
+        CourseDto GetCourse(String id);
+
+        void UpdateCourse(CourseDto _course);
     }
     public class CourseService : ICourseService
     {
@@ -48,6 +52,27 @@ namespace Core.Services
             var courses = _repository.GetAll().ToList();
             var courseDtos = _mapper.Map<List<CourseDto>>(courses);
             return courseDtos;
+        }
+
+        public CourseDto GetCourse(String id)
+        {
+            var course = _repository.GetById(id).Result;
+            var courseDto = _mapper.Map<CourseDto>(course);
+            return courseDto;
+        }
+
+        public void UpdateCourse(CourseDto _course)
+        {
+            var course = _repository.GetById(_course.Id).Result;
+            course.Name = _course.Name;
+            course.Description = _course.Description;
+            course.Fees = _course.Fees;
+            course.StartDate = _course.StartDate;
+            course.EndDate = _course.EndDate;
+            course.UpdatedOn = DateTime.Now;
+            course.Deleted = 0;
+
+            _repository.Update(course).Wait();
         }
     }
 }
