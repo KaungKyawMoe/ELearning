@@ -1,0 +1,52 @@
+﻿@page
+@model Web.Pages.Courses.CreateModel
+@{
+}
+
+<section class="mx-auto align-content-center w-50">
+    <h1 class="text-center">Create Course</h1>
+    <form method="post">
+        <div class="row my-2">
+            <label class="col-sm-4">Name</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" asp-for="course.Name" />
+            </div>
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-4">Description</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" asp-for="course.Description" />
+            </div>
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-4">Fees</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" asp-for="course.Fees" />
+            </div>
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-4">Start Date</label>
+            <div class="col-sm-8">
+                <input type="date" class="form-control" asp-for="course.StartDate" />
+            </div>
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-4">End Date</label>
+            <div class="col-sm-8">
+                <input type="date" class="form-control" asp-for="course.EndDate" />
+            </div>
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-4"></label>
+            <div class="col-sm-8" style="max-width:150px;min-width:100px;">
+                <input type="submit" class="form-control" value="Save" />
+            </div>
+        </div>
+    </form>
+</section>
+

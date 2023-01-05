@@ -1,0 +1,35 @@
+﻿@page
+@model Web.Pages.Courses.IndexModel
+@{
+}
+<a asp-page="/Courses/Create" >Create New Course</a>
+<section>
+    <div class="table-responsive">
+        @{
+            <table class="table table-striped caption-top">
+                <caption>List of Courses</caption>
+                <thead class="table-info">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Fees</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var data in Model.courseList)
+                    {
+                        <tr>
+                            <td>@data.Name</td>
+                            <td>@data.Description</td>
+                            <td>@data.Fees MMK</td>
+                            <td>@data.StartDate</td>
+                            <td>@data.EndDate</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</section>
