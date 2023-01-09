@@ -5,6 +5,7 @@ Table of Contents
 ------------
 
  - Entity Framework Core
+ - Razor Page
  - Mysql
  - .Net 6
  - UnitOfWork 
