@@ -109,17 +109,25 @@ namespace Core.Entities
                     .HasMaxLength(500)
                     .HasColumnName("description");
 
-                entity.Property(e => e.EndDate).HasColumnName("end_date");
+                entity.Property(e => e.EndDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("end_date");
 
                 entity.Property(e => e.Fees)
                     .HasPrecision(10)
                     .HasColumnName("fees");
 
+                entity.Property(e => e.ImgSrc)
+                    .HasMaxLength(300)
+                    .HasColumnName("img_src");
+
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
                     .HasColumnName("name");
 
-                entity.Property(e => e.StartDate).HasColumnName("start_date");
+                entity.Property(e => e.StartDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("start_date");
 
                 entity.Property(e => e.UpdatedOn)
                     .HasColumnType("datetime")
@@ -159,7 +167,7 @@ namespace Core.Entities
                     .HasColumnName("email");
 
                 entity.Property(e => e.Image)
-                    .HasMaxLength(500)
+                    .HasColumnType("blob")
                     .HasColumnName("image");
 
                 entity.Property(e => e.Name)

@@ -18,6 +18,7 @@ namespace Web.Pages.Courses
 
         public void OnGet()
         {
+            course = new CourseDto();
         }
 
         public async Task<IActionResult> OnPostAsync()

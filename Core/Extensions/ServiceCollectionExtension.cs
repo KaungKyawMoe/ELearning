@@ -7,6 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.Mappings;
+using Core.Controllers;
+using Core.Entities;
+using Core.Repositories;
+using Core.Services;
+using Microsoft.EntityFrameworkCore;
+using Core.Utilities;
 
 namespace Core.Extensions
 {
@@ -22,6 +28,20 @@ namespace Core.Extensions
 
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            services.AddSingleton<IAppHandler, AppHandler>();
+
+            services.AddScoped<DbContext, e_learningContext>();
+
+            services.AddScoped<IRepository<Course>, Repository<Course>>();
+            services.AddScoped<IRepository<Student>, Repository<Student>>();
+
+            services.AddScoped<ICourseController, CourseController>();
+            services.AddScoped<IStudentController, StudentController>();
+
+            services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<IStudentService, StudentService>();
+
             return services;
         }
     }

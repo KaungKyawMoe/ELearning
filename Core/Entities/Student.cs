@@ -17,7 +17,7 @@ namespace Core.Entities
         public string Address { get; set; } = null!;
         public string Nrc { get; set; } = null!;
         public string Email { get; set; } = null!;
-        public string? Image { get; set; }
+        public byte[]? Image { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public sbyte? Deleted { get; set; }

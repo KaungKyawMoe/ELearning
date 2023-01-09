@@ -14,6 +14,7 @@ namespace Core.Mappings
         public MappingProfile()
         {
             CreateMap<Course, CourseDto>();
+            CreateMap<Student, StudentDto>();
         }
     }
 }

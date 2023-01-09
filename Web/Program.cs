@@ -18,11 +18,6 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddExtService();
 
-builder.Services.AddScoped<DbContext,e_learningContext>();
-builder.Services.AddScoped<IRepository<Course>,Repository<Course>>();
-builder.Services.AddScoped<ICourseController,CourseController>();
-builder.Services.AddScoped<ICourseService,CourseService>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

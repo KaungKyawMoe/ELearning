@@ -1,0 +1,38 @@
+﻿@page
+@model Web.Pages.Students.IndexModel
+@{
+}
+<a asp-page="/Students/Create">New Students</a>
+<div class="table-responsive">
+    @{
+        <table class="table table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Phno</th>
+                    <th>Email</th>
+                    <th>Nrc</th>
+                    <th>Dob</th>
+                    <th>Address</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.students)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.PhNo</td>
+                        <td>@item.Email</td>
+                        <td>@item.Nrc</td>
+                        <td>@item.Dob</td>
+                        <td>@item.Address</td>
+                        <td><img src="@item.ImageSrc" alt="@item.Name" width="50" height="50" /></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    
+</div>
