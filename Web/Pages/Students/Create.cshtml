@@ -3,9 +3,9 @@
 @{
 }
 
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" asp-page="create">
     <div asp-validation-summary="ModelOnly"></div>
-
+    <input asp-for="student.Id" hidden />
     <div class="row my-2">
         <label class="col-md-4 form-label" asp-for="student.Name"></label>
         <div class="col-md-8">
@@ -55,10 +55,14 @@
     </div>
 
     <div class="row my-2">
-        <label class="col-md-4 form-label" asp-for="image"></label>
-        <div class="col-md-8">
-            <input type="file" asp-for="image" class="form-control" />
-            <span asp-validation-for="image"></span>
+        <label class="col-md-4 form-label" asp-for="student.imageFile"></label>
+        <div class="col-md-4">
+            <input type="file" asp-for="student.imageFile" class="form-control" />
+            <span asp-validation-for="student.imageFile"></span>
+        </div>
+        <div class="col-md-4">
+            <img src="@Model.student.UploadedImage" asp-for="@Model.student.UploadedImage" width="100" height="100"/>
+            <input type="submit" value="Upload" asp-page-handler="ImageUpload" />
         </div>
     </div>
 

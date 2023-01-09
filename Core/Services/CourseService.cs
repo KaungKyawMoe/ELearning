@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using UnitOfWork;
 
 namespace Core.Services
 {
@@ -15,24 +16,26 @@ namespace Core.Services
     {
         List<CourseDto> GetCourses();
 
-        void CreateCourse(CourseDto course);
+        bool CreateCourse(CourseDto course);
 
         CourseDto GetCourse(String id);
 
-        void UpdateCourse(CourseDto _course);
+        bool UpdateCourse(CourseDto _course);
     }
     public class CourseService : ICourseService
     {
-        private readonly IRepository<Course> _repository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork<e_learningContext> _unitOfWork;
 
-        public CourseService(IRepository<Course> repository, IMapper mapper)
+        public CourseService(
+            IUnitOfWork<e_learningContext> unitOfWork,
+            IMapper mapper)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public void CreateCourse(CourseDto _course)
+        public bool CreateCourse(CourseDto _course)
         {
             var course = new Course();
             course.Id = Guid.NewGuid().ToString();
@@ -44,26 +47,30 @@ namespace Core.Services
             course.CreatedOn = DateTime.Now;
             course.Deleted = 0;
 
-            _repository.Create(course).Wait();
+            //_repository.Create(course).Wait();
+            return _unitOfWork.GetRepository<Course>().Create(course).Result;
         }
 
         public List<CourseDto> GetCourses()
         {
-            var courses = _repository.GetAll().ToList();
+            //var courses = _repository.GetAll();
+            var courses = _unitOfWork.GetRepository<Course>().GetAll().Result;
             var courseDtos = _mapper.Map<List<CourseDto>>(courses);
             return courseDtos;
         }
 
         public CourseDto GetCourse(String id)
         {
-            var course = _repository.GetById(id).Result;
+            //var course = _repository.GetById(id).Result;
+            var course = _unitOfWork.GetRepository<Course>().GetById(id).Result;
             var courseDto = _mapper.Map<CourseDto>(course);
             return courseDto;
         }
 
-        public void UpdateCourse(CourseDto _course)
+        public bool UpdateCourse(CourseDto _course)
         {
-            var course = _repository.GetById(_course.Id).Result;
+            //var course = _repository.GetById(_course.Id).Result;
+            var course = _unitOfWork.GetRepository<Course>().GetById(_course.Id).Result;
             course.Name = _course.Name;
             course.Description = _course.Description;
             course.Fees = _course.Fees;
@@ -72,7 +79,8 @@ namespace Core.Services
             course.UpdatedOn = DateTime.Now;
             course.Deleted = 0;
 
-            _repository.Update(course).Wait();
+            //_repository.Update(course).Wait();
+            return _unitOfWork.GetRepository<Course>().Update(course).Result;
         }
     }
 }

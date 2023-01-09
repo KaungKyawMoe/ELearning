@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,15 +16,17 @@ namespace Core.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class 
     {
-        IQueryable<TEntity> GetAll();
+        Task<IEnumerable<TEntity>> GetAll();
 
         Task<TEntity> GetById(string id);
 
-        Task Create(TEntity entity);
+        Task<bool> Create(TEntity entity);
 
-        Task Update(TEntity entity);
+        Task<bool> Update(TEntity entity);
 
-        Task Delete(string id);
+        Task<bool> Delete(string id);
+
+        Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
     }
 
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
@@ -33,22 +36,24 @@ namespace Core.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task Create(TEntity entity)
+        public async Task<bool> Create(TEntity entity)
         {
            await _dbContext.Set<TEntity>().AddAsync(entity);
            await _dbContext.SaveChangesAsync();
+           return true;
         }
 
-        public async Task Delete(string id)
+        public async Task<bool> Delete(string id)
         {
             TEntity entity = await GetById(id);
             _dbContext.Remove<TEntity>(entity);
             await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public IQueryable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-            return _dbContext.Set<TEntity>().AsNoTracking();
+            return await _dbContext.Set<TEntity>().ToListAsync();
         }
 
         public async Task<TEntity> GetById(string id)
@@ -56,10 +61,16 @@ namespace Core.Repositories
             return await _dbContext.FindAsync<TEntity>(id);
         }
 
-        public async Task Update(TEntity entity)
+        public async Task<bool> Update(TEntity entity)
         {
             _dbContext.Set<TEntity>().Update(entity);
             await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _dbContext.Set<TEntity>().Where(predicate).ToListAsync();
         }
     }
 }

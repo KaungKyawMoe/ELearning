@@ -3,6 +3,7 @@ using Core.Models;
 using Core.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text;
 
 namespace Web.Pages.Students
 {
@@ -11,8 +12,7 @@ namespace Web.Pages.Students
         [BindProperty]
         public StudentDto student { get; set; }
 
-        [BindProperty]
-        public IFormFile image { get; set; }
+        public string id { get; set; }
 
         private readonly IStudentController _studentController;
         private readonly IAppHandler _appHandler;
@@ -24,17 +24,37 @@ namespace Web.Pages.Students
             _appHandler = appHandler;
         }
 
-        public void OnGet()
+        public void OnGet(String? id = null)
         {
+            if(id != null)
+            {
+                student = _studentController.GetStudentById(id);
+                student.UploadedImage = "/images/" + Encoding.UTF8.GetString(student.Image);
+            }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task OnPostImageUploadAsync()
         {
-            var imageFile = await _appHandler.ImageUpload(image);
+            await _appHandler.ImageUpload(student.imageFile);
 
-            student.ImageSrc = image.FileName;
+            student.UploadedImage = "/images/" + student.imageFile.FileName;
 
-            _studentController.Create(student);
+        }
+
+        public async  Task<IActionResult> OnPostAsync()
+        {
+            var imageFile = await _appHandler.ImageUpload(student.imageFile);
+
+            student.ImageSrc = student.imageFile.FileName;
+
+            if(student.Id != null)
+            {
+                _studentController.Update(student);
+            }
+            else
+            {
+                _studentController.Create(student);
+            }
 
             return RedirectToPage("/Students/Index");
         }

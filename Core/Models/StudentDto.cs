@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -26,5 +27,9 @@ namespace Core.Models
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public sbyte? Deleted { get; set; }
+
+        public IFormFile imageFile { get; set; }
+
+        public string UploadedImage { get; set; }
     }
 }

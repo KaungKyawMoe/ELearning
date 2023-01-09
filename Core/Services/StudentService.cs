@@ -7,32 +7,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnitOfWork;
 
 namespace Core.Services
 {
     public interface IStudentService
     {
-        public void CreateStudent(StudentDto student);
+        public bool CreateStudent(StudentDto student);
 
         public List<StudentDto> GetAllStudents();
 
-        public void UpdateStudent(StudentDto student);
+        public StudentDto GetStudentById(string id);
+
+        public bool UpdateStudent(StudentDto student);
 
         public void DeleteStudent(int id);
     }
 
     public class StudentService : IStudentService
     {
-        private readonly IRepository<Student> _repository;
+        //private readonly IRepository<Student> _repository;
+        private readonly IUnitOfWork<e_learningContext> _unitOfWork;
         private readonly IMapper _mapper;
 
-        public StudentService(IRepository<Student> repository,
+        public StudentService(
+            IUnitOfWork<e_learningContext> unitOfWork,
+            //<Student> repository,
             IMapper mapper){
-            _repository = repository;
+            //_repository = repository;
+            _unitOfWork= unitOfWork;
             _mapper = mapper;
         }
 
-        public void CreateStudent(StudentDto _student){
+        public bool CreateStudent(StudentDto _student){
 
             Student student = new Student();
             student.Id = _student.Id;
@@ -45,7 +52,9 @@ namespace Core.Services
             student.PhNo= _student.PhNo;
             student.CreatedOn = DateTime.Now;
             student.Deleted = 0;
-            _repository.Create(student);
+
+            //_repository.Create(student).Wait();
+            return _unitOfWork.GetRepository<Student>().Create(student).Result;
         }
 
         public void DeleteStudent(int id)
@@ -55,13 +64,35 @@ namespace Core.Services
 
         public List<StudentDto> GetAllStudents()
         {
-            var students = _repository.GetAll();
+            //var students = _repository.GetAll();
+            var students = _unitOfWork.GetRepository<Student>().GetAll().Result;
             return _mapper.Map<List<StudentDto>>(students);
         }
 
-        public void UpdateStudent(StudentDto student)
+        public StudentDto GetStudentById(string id)
         {
-            throw new NotImplementedException();
+            //var student = _repository.GetById(id).Result;
+            var student = _unitOfWork.GetRepository<Student>().GetById(id).Result;
+            return _mapper.Map<StudentDto>(student);
+        }
+
+        public bool UpdateStudent(StudentDto _student)
+        {
+            //var student = _repository.GetById(_student.Id).Result;
+            var student = _unitOfWork.GetRepository<Student>().GetById(_student.Id).Result;
+            student.Id = _student.Id;
+            student.Name = _student.Name;
+            student.Email = _student.Email;
+            student.Nrc = _student.Nrc;
+            student.Address = _student.Address;
+            student.Image = _student.Image;
+            student.Dob = _student.Dob;
+            student.PhNo = _student.PhNo;
+            student.UpdatedOn = DateTime.Now;
+            student.Deleted = 0;
+
+            //_repository.Update(student).Wait();
+            return _unitOfWork.GetRepository<Student>().Update(student).Result;
         }
     }
 }

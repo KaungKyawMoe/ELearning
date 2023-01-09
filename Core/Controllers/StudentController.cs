@@ -13,6 +13,8 @@ namespace Core.Controllers
     {
         public List<StudentDto> GetAllStudents();
 
+        public StudentDto GetStudentById(string id);
+
         public void Create(StudentDto student);
 
         public void Update(StudentDto student);
@@ -46,9 +48,15 @@ namespace Core.Controllers
             return _studentService.GetAllStudents();
         }
 
+        public StudentDto GetStudentById(string id)
+        {
+            return _studentService.GetStudentById(id);
+        }
+
         public void Update(StudentDto student)
         {
-            throw new NotImplementedException();
+            student.Image = Encoding.ASCII.GetBytes(student.ImageSrc);
+            _studentService.UpdateStudent(student);
         }
     }
 }

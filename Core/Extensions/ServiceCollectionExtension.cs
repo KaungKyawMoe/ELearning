@@ -13,6 +13,7 @@ using Core.Repositories;
 using Core.Services;
 using Microsoft.EntityFrameworkCore;
 using Core.Utilities;
+using UnitOfWork;
 
 namespace Core.Extensions
 {
@@ -29,12 +30,16 @@ namespace Core.Extensions
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            services.AddScoped<IUnitOfWork<e_learningContext>, UnitOfWork<e_learningContext>>();
+
             services.AddSingleton<IAppHandler, AppHandler>();
 
             services.AddScoped<DbContext, e_learningContext>();
 
+            /*
             services.AddScoped<IRepository<Course>, Repository<Course>>();
             services.AddScoped<IRepository<Student>, Repository<Student>>();
+            */
 
             services.AddScoped<ICourseController, CourseController>();
             services.AddScoped<IStudentController, StudentController>();
