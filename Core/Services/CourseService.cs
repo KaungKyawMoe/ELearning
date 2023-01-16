@@ -14,13 +14,13 @@ namespace Core.Services
 {
     public interface ICourseService
     {
-        List<CourseDto> GetCourses();
+        Task<List<CourseDto>> GetCourses();
 
-        bool CreateCourse(CourseDto course);
+        Task<bool> CreateCourse(CourseDto course);
 
-        CourseDto GetCourse(String id);
+        Task<CourseDto> GetCourse(String id);
 
-        bool UpdateCourse(CourseDto _course);
+        Task<bool> UpdateCourse(CourseDto _course);
     }
     public class CourseService : ICourseService
     {
@@ -35,7 +35,7 @@ namespace Core.Services
             _mapper = mapper;
         }
 
-        public bool CreateCourse(CourseDto _course)
+        public async Task<bool> CreateCourse(CourseDto _course)
         {
             var course = new Course();
             course.Id = Guid.NewGuid().ToString();
@@ -51,7 +51,7 @@ namespace Core.Services
             return _unitOfWork.GetRepository<Course>().Create(course).Result;
         }
 
-        public List<CourseDto> GetCourses()
+        public async Task<List<CourseDto>> GetCourses()
         {
             //var courses = _repository.GetAll();
             var courses = _unitOfWork.GetRepository<Course>().GetAll().Result;
@@ -59,7 +59,7 @@ namespace Core.Services
             return courseDtos;
         }
 
-        public CourseDto GetCourse(String id)
+        public async Task<CourseDto> GetCourse(String id)
         {
             //var course = _repository.GetById(id).Result;
             var course = _unitOfWork.GetRepository<Course>().GetById(id).Result;
@@ -67,7 +67,7 @@ namespace Core.Services
             return courseDto;
         }
 
-        public bool UpdateCourse(CourseDto _course)
+        public async Task<bool> UpdateCourse(CourseDto _course)
         {
             //var course = _repository.GetById(_course.Id).Result;
             var course = _unitOfWork.GetRepository<Course>().GetById(_course.Id).Result;

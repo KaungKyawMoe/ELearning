@@ -1,19 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Core.Mappings;
 using Core.Controllers;
 using Core.Entities;
-using Core.Repositories;
 using Core.Services;
 using Microsoft.EntityFrameworkCore;
 using Core.Utilities;
 using UnitOfWork;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace Core.Extensions
 {
@@ -28,7 +23,24 @@ namespace Core.Extensions
             });
 
             IMapper mapper = mappingConfig.CreateMapper();
+
             services.AddSingleton(mapper);
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Auth/Login";
+                    options.AccessDeniedPath = "/Auth/AccessDenied";
+
+                    options.Cookie = new CookieBuilder
+                    {
+                        SameSite = SameSiteMode.Strict,
+                        SecurePolicy = CookieSecurePolicy.Always,
+                        IsEssential = true,
+                        HttpOnly = true
+                    };
+                    options.Cookie.Name = "Authentication";
+                });
 
             services.AddScoped<IUnitOfWork<e_learningContext>, UnitOfWork<e_learningContext>>();
 
@@ -43,9 +55,11 @@ namespace Core.Extensions
 
             services.AddScoped<ICourseController, CourseController>();
             services.AddScoped<IStudentController, StudentController>();
+            services.AddScoped<IAuthController, AuthController>();
 
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             return services;
         }

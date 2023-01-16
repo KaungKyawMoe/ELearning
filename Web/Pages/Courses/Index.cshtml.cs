@@ -1,25 +1,28 @@
 using Core.Controllers;
 using Core.Models;
+using Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Web.Pages.Courses
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
-        private readonly ICourseController _courseController;
+        private readonly ICourseService _courseService;
 
 
         public List<CourseDto> courseList;
 
-        public IndexModel(ICourseController courseController)
+        public IndexModel(ICourseService courseService)
         {
-            _courseController = courseController;
+            _courseService = courseService;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
-            var courseDtos = _courseController.GetCourses();
+            var courseDtos = await _courseService.GetCourses();
             courseList = courseDtos.ToList();
         }
     }

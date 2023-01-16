@@ -1,27 +1,30 @@
 using Core.Controllers;
 using Core.Models;
+using Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Web.Pages.Courses
 {
+    [Authorize]
     public class EditModel : PageModel
     {
 
-        ICourseController _courseController;
+        ICourseService _couserService;
 
         [BindProperty]
         public CourseDto course { get; set; }
 
-        public EditModel(ICourseController courseController)
+        public EditModel(ICourseService courseService)
         {
-            _courseController = courseController;
+            _couserService = courseService;
         }
 
-        public void OnGet(String? Id)
+        public async Task OnGet(String? Id)
         {
-            var _course = _courseController.GetCourse(Id);
+            var _course = await _couserService.GetCourse(Id);
             if(_course != null)
             {
                 course = _course;
@@ -35,7 +38,7 @@ namespace Web.Pages.Courses
                 return Page();
             }
 
-            _courseController.UpdateCourse(course);
+            await _couserService.UpdateCourse(course);
 
             return RedirectToPage("./Index");
         }

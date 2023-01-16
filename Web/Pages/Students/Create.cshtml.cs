@@ -1,12 +1,15 @@
 using Core.Controllers;
 using Core.Models;
+using Core.Services;
 using Core.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text;
 
 namespace Web.Pages.Students
 {
+    [Authorize]
     public class CreateModel : PageModel
     {
         [BindProperty]
@@ -14,21 +17,21 @@ namespace Web.Pages.Students
 
         public string id { get; set; }
 
-        private readonly IStudentController _studentController;
+        private readonly IStudentService _studentService;
         private readonly IAppHandler _appHandler;
 
-        public CreateModel(IStudentController studentController,
+        public CreateModel(IStudentService studentService,
             IAppHandler appHandler)
         {
-            _studentController = studentController;
+            _studentService = studentService;
             _appHandler = appHandler;
         }
 
-        public void OnGet(String? id = null)
+        public async Task OnGet(String? id = null)
         {
             if(id != null)
             {
-                student = _studentController.GetStudentById(id);
+                student = await _studentService.GetStudentById(id);
                 student.UploadedImage = "/images/" + Encoding.UTF8.GetString(student.Image);
             }
         }
@@ -41,7 +44,7 @@ namespace Web.Pages.Students
 
         }
 
-        public async  Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             var imageFile = await _appHandler.ImageUpload(student.imageFile);
 
@@ -49,11 +52,11 @@ namespace Web.Pages.Students
 
             if(student.Id != null)
             {
-                _studentController.Update(student);
+                await _studentService.UpdateStudent(student);
             }
             else
             {
-                _studentController.Create(student);
+                await _studentService.CreateStudent(student);
             }
 
             return RedirectToPage("/Students/Index");

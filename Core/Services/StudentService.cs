@@ -13,15 +13,15 @@ namespace Core.Services
 {
     public interface IStudentService
     {
-        public bool CreateStudent(StudentDto student);
+        public Task<bool> CreateStudent(StudentDto student);
 
-        public List<StudentDto> GetAllStudents();
+        public Task<List<StudentDto>> GetAllStudents();
 
-        public StudentDto GetStudentById(string id);
+        public Task<StudentDto> GetStudentById(string id);
 
-        public bool UpdateStudent(StudentDto student);
+        public Task<bool> UpdateStudent(StudentDto student);
 
-        public void DeleteStudent(int id);
+        public Task DeleteStudent(int id);
     }
 
     public class StudentService : IStudentService
@@ -39,7 +39,7 @@ namespace Core.Services
             _mapper = mapper;
         }
 
-        public bool CreateStudent(StudentDto _student){
+        public async Task<bool> CreateStudent(StudentDto _student){
 
             Student student = new Student();
             student.Id = _student.Id;
@@ -57,26 +57,26 @@ namespace Core.Services
             return _unitOfWork.GetRepository<Student>().Create(student).Result;
         }
 
-        public void DeleteStudent(int id)
+        public async Task DeleteStudent(int id)
         {
             throw new NotImplementedException();
         }
 
-        public List<StudentDto> GetAllStudents()
+        public async Task<List<StudentDto>> GetAllStudents()
         {
             //var students = _repository.GetAll();
             var students = _unitOfWork.GetRepository<Student>().GetAll().Result;
             return _mapper.Map<List<StudentDto>>(students);
         }
 
-        public StudentDto GetStudentById(string id)
+        public async Task<StudentDto> GetStudentById(string id)
         {
             //var student = _repository.GetById(id).Result;
             var student = _unitOfWork.GetRepository<Student>().GetById(id).Result;
             return _mapper.Map<StudentDto>(student);
         }
 
-        public bool UpdateStudent(StudentDto _student)
+        public async Task<bool> UpdateStudent(StudentDto _student)
         {
             //var student = _repository.GetById(_student.Id).Result;
             var student = _unitOfWork.GetRepository<Student>().GetById(_student.Id).Result;

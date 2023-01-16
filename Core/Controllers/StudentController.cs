@@ -45,12 +45,14 @@ namespace Core.Controllers
 
         public List<StudentDto> GetAllStudents()
         {
-            return _studentService.GetAllStudents();
+            //return _studentService.GetAllStudents();
+            throw new NotImplementedException();
         }
 
         public StudentDto GetStudentById(string id)
         {
-            return _studentService.GetStudentById(id);
+            //return _studentService.GetStudentById(id);
+            throw new NotImplementedException();
         }
 
         public void Update(StudentDto student)

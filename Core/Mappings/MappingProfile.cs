@@ -15,6 +15,8 @@ namespace Core.Mappings
         {
             CreateMap<Course, CourseDto>();
             CreateMap<Student, StudentDto>();
+            CreateMap<User, UserDto>();
+            CreateMap<Role, RoleDto>();
         }
     }
 }

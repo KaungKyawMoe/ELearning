@@ -18,7 +18,9 @@ namespace Core.Entities
 
         public virtual DbSet<Class> Classes { get; set; } = null!;
         public virtual DbSet<Course> Courses { get; set; } = null!;
+        public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Student> Students { get; set; } = null!;
+        public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -134,6 +136,31 @@ namespace Core.Entities
                     .HasColumnName("updated_on");
             });
 
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.ToTable("roles");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(200)
+                    .HasColumnName("id");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("timestamp")
+                    .HasColumnName("created_on");
+
+                entity.Property(e => e.Deleted)
+                    .HasColumnType("tinyint(4)")
+                    .HasColumnName("deleted");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("datetime")
+                    .HasColumnName("updated_on");
+            });
+
             modelBuilder.Entity<Student>(entity =>
             {
                 entity.ToTable("students");
@@ -185,6 +212,50 @@ namespace Core.Entities
                 entity.Property(e => e.UpdatedOn)
                     .HasColumnType("datetime")
                     .HasColumnName("updated_on");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("users");
+
+                entity.HasIndex(e => e.RoleId, "role_id_idx");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(200)
+                    .HasColumnName("id");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasColumnName("created_on");
+
+                entity.Property(e => e.Deleted)
+                    .HasColumnType("tinyint(4)")
+                    .HasColumnName("deleted");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(45)
+                    .HasColumnName("email");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(45)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.Password)
+                    .HasMaxLength(45)
+                    .HasColumnName("password");
+
+                entity.Property(e => e.RoleId)
+                    .HasMaxLength(200)
+                    .HasColumnName("role_id");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("datetime")
+                    .HasColumnName("updated_on");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.RoleId)
+                    .HasConstraintName("role_id");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -1,5 +1,7 @@
 using Core.Controllers;
 using Core.Models;
+using Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Reflection.Metadata.Ecma335;
@@ -7,20 +9,21 @@ using System.Text;
 
 namespace Web.Pages.Students
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         public List<StudentDto> students { get; set; }
 
-        private readonly IStudentController _studentController;
+        private readonly IStudentService _studentService;
 
-        public IndexModel(IStudentController studentController)
+        public IndexModel(IStudentService studentService)
         {
-            _studentController = studentController;
+            _studentService = studentService;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
-            var _students = _studentController.GetAllStudents();
+            var _students =  await _studentService.GetAllStudents();
             
             _students.ToList().ForEach(student =>
             {

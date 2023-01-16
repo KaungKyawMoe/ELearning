@@ -32,7 +32,8 @@ namespace Core.Controllers
 
         public List<CourseDto> GetCourses()
         {
-            return _courseService.GetCourses();
+            //return _courseService.GetCourses();
+            throw new NotImplementedException();
         }
 
         public void CreateCourse(CourseDto _course)
@@ -42,7 +43,8 @@ namespace Core.Controllers
 
         public CourseDto GetCourse(String id)
         {
-            return _courseService.GetCourse(id);
+            //return _courseService.GetCourse(id);
+            throw new NotImplementedException();
         }
         
         public void UpdateCourse(CourseDto _course){

@@ -1,0 +1,38 @@
+﻿@page
+@model Web.Pages.Auth.RegisterModel
+@{
+}
+
+<div class="d-flex vh-75 justify-content-center align-items-center">
+    <form asp-page="Register" method="post" class="w-50">
+        <div asp-validation-summary="All"></div>
+        <h3 class="text-center">Register</h3>
+        <div class="my-1">
+            <label class="form-label" asp-for="User.Name"></label>
+            <input class="form-control" type="text" asp-for="User.Name" />
+            <span class="text-danger" asp-validation-for="User.Name"></span>
+        </div>
+
+        <div class="my-1">
+            <label class="form-label" asp-for="User.Email"></label>
+            <input class="form-control" type="text" asp-for="User.Email" />
+            <span class="text-danger" asp-validation-for="User.Email"></span>
+        </div>
+
+        <div class="my-1">
+            <label class="form-label" asp-for="User.Password"></label>
+            <input class="form-control" type="text" asp-for="User.Password" />
+            <span class="text-danger" asp-validation-for="User.Password"></span>
+        </div>
+
+        <div class="my-1">
+            <label class="form-label" asp-for="User.RoleId"></label>
+            <select class="form-select" asp-for="User.RoleId" asp-items="Model.Roles"></select>
+            <span class="text-danger" asp-validation-for="User.RoleId"></span>
+        </div>
+
+        <div class="my-1">
+            <button class="btn btn-outline-primary">Register</button>
+        </div>
+    </form>
+</div>

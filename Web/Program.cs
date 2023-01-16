@@ -13,10 +13,10 @@ builder.Services.AddDbContext<e_learningContext>(options =>
     options.UseMySql(builder.Configuration["DbConnections:MySqlConnection"],ServerVersion.Parse("5.0.7"))
 );
 
+builder.Services.AddExtService();
+
 // Add services to the container.
 builder.Services.AddRazorPages();
-
-builder.Services.AddExtService();
 
 var app = builder.Build();
 
@@ -32,6 +32,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
