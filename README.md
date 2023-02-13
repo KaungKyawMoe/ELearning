@@ -12,6 +12,7 @@ Table of Contents
  - Repositories Design Pattern
  - Service Collection Extension
  - Multiple Project in single solutions
+ - Cookie Authentication
 
 Students
 - Create
