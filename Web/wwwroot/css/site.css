@@ -2,6 +2,10 @@ html {
   font-size: 14px;
 }
 
+*{
+    border-radius:0 !important;
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -23,3 +27,48 @@ body {
     right:0;
     margin:0 auto;
 }
+
+.site-bg-primary-color {
+    /*background-color : #219ebc;*/
+    background-color: #ffb703;
+}
+
+.site-bg-primary-light-color{
+    background-color: #8ecae6;
+}
+
+.site-bg-dark-color{
+    background-color: #023047;
+}
+
+.site-bg-brand-color {
+    /*background-color: #ffb703;*/
+    background-color: #219ebc;
+}
+
+.site-bg-brand-dark-color{
+    background-color: #fb8500;
+}
+
+.site-text-primary-color {
+    /*color: #219ebc;*/
+    color: #ffb703;
+}
+
+.site-text-primary-light-color {
+    color: #8ecae6;
+}
+
+.site-text-dark-color {
+    color: #023047;
+}
+
+.site-text-brand-color {
+    /*color: #ffb703;*/
+    color: #219ebc;
+}
+
+.site-text-brand-dark-color {
+    color: #fb8500;
+}
+.

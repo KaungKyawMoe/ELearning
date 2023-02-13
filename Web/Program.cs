@@ -3,6 +3,7 @@ using Core.Controllers;
 using Core.Entities;
 using Core.Extensions;
 using Core.Mappings;
+using Core.Models;
 using Core.Repositories;
 using Core.Services;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +14,10 @@ builder.Services.AddDbContext<e_learningContext>(options =>
     options.UseMySql(builder.Configuration["DbConnections:MySqlConnection"],ServerVersion.Parse("5.0.7"))
 );
 
-builder.Services.AddExtService();
-
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddExtService();
 
 var app = builder.Build();
 

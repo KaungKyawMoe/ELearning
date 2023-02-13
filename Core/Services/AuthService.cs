@@ -24,6 +24,10 @@ namespace Core.Services
         Task<RoleDto> GetRoleById(string id);
 
         Task<List<RoleDto>> GetAllRoles();
+
+        Task<bool> IsUserExist(UserDto userDto);
+
+        Task<UserDto> GetUserByEmail(string email);
     }
 
     public class AuthService : IAuthService
@@ -54,6 +58,27 @@ namespace Core.Services
             return true;
 
         }
+
+        public async Task<bool> IsUserExist(UserDto userDto)
+        {
+            var result = await GetUserByEmail(userDto.Email);
+            return !string.IsNullOrEmpty(result.Id);
+        }
+
+        public async Task<UserDto> GetUserByEmail(string email)
+        {
+            var result = await _unitOfWork.GetRepository<User>().Find(x => x.Email == email);
+            if(result.Any())
+            {
+                return _mapper.Map<UserDto>(result.FirstOrDefault());
+            }
+            else
+            {
+                return new UserDto();
+            }
+        }
+
+
 
         public async Task<UserDto> GetUserById(string id)
         {

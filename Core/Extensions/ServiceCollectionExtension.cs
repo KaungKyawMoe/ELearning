@@ -9,6 +9,7 @@ using Core.Utilities;
 using UnitOfWork;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Core.Helper;
 
 namespace Core.Extensions
 {
@@ -25,6 +26,8 @@ namespace Core.Extensions
             IMapper mapper = mappingConfig.CreateMapper();
 
             services.AddSingleton(mapper);
+
+            services.AddSingleton<IPasswordHelper,PasswordHelper>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
