@@ -20,6 +20,8 @@ namespace UnitOfWork
         public Task<bool> Update(TEntity entity);
 
         public Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
+
+        public Task<int> CommitAsync();
     }
 
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
@@ -59,6 +61,11 @@ namespace UnitOfWork
         {
             this.set.Update(entity);
             return true;
+        }
+
+        public async Task<int> CommitAsync()
+        {
+            return await this.dbContext.SaveChangesAsync();
         }
     }
 }

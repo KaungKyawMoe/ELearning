@@ -13,13 +13,13 @@ namespace Core.Services
 {
     public interface IStudentService
     {
-        public Task<bool> CreateStudent(StudentDto student);
+        public Task<ResultModel<Object>> CreateStudent(StudentDto student);
 
         public Task<List<StudentDto>> GetAllStudents();
 
         public Task<StudentDto> GetStudentById(string id);
 
-        public Task<bool> UpdateStudent(StudentDto student);
+        public Task<ResultModel<Object>> UpdateStudent(StudentDto student);
 
         public Task DeleteStudent(int id);
     }
@@ -27,11 +27,11 @@ namespace Core.Services
     public class StudentService : IStudentService
     {
         //private readonly IRepository<Student> _repository;
-        private readonly IUnitOfWork<e_learningContext> _unitOfWork;
+        private readonly IUnitOfWork<Context> _unitOfWork;
         private readonly IMapper _mapper;
 
         public StudentService(
-            IUnitOfWork<e_learningContext> unitOfWork,
+            IUnitOfWork<Context> unitOfWork,
             //<Student> repository,
             IMapper mapper){
             //_repository = repository;
@@ -39,22 +39,41 @@ namespace Core.Services
             _mapper = mapper;
         }
 
-        public async Task<bool> CreateStudent(StudentDto _student){
+        public async Task<ResultModel<Object>> CreateStudent(StudentDto _student){
 
-            Student student = new Student();
-            student.Id = _student.Id;
-            student.Name = _student.Name;
-            student.Email = _student.Email;
-            student.Nrc = _student.Nrc;
-            student.Address = _student.Address;
-            student.Image= _student.Image;
-            student.Dob = _student.Dob;
-            student.PhNo= _student.PhNo;
-            student.CreatedOn = DateTime.Now;
-            student.Deleted = 0;
+            try
+            {
+                Student student = new Student();
+                student.Id = _student.Id;
+                student.Name = _student.Name;
+                student.Email = _student.Email;
+                student.Nrc = _student.Nrc;
+                student.Address = _student.Address;
+                if(_student.Image != null)
+                {
+                    student.Image = _student.Image;
+                }
+                student.Dob = _student.Dob;
+                student.PhNo = _student.PhNo;
+                student.CreatedOn = DateTime.Now;
+                student.Deleted = 0;
 
-            //_repository.Create(student).Wait();
-            return _unitOfWork.GetRepository<Student>().Create(student).Result;
+                //_repository.Create(student).Wait();
+                await _unitOfWork.GetRepository<Student>().Create(student);
+
+                await _unitOfWork.GetRepository<Student>().CommitAsync();
+
+                return new ResultModel<Object>()
+                {
+                    Data = student,
+                    IsSuccess = true,
+                    Message = "Data is created successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task DeleteStudent(int id)
@@ -76,23 +95,43 @@ namespace Core.Services
             return _mapper.Map<StudentDto>(student);
         }
 
-        public async Task<bool> UpdateStudent(StudentDto _student)
+        public async Task<ResultModel<Object>> UpdateStudent(StudentDto _student)
         {
-            //var student = _repository.GetById(_student.Id).Result;
-            var student = _unitOfWork.GetRepository<Student>().GetById(_student.Id).Result;
-            student.Id = _student.Id;
-            student.Name = _student.Name;
-            student.Email = _student.Email;
-            student.Nrc = _student.Nrc;
-            student.Address = _student.Address;
-            student.Image = _student.Image;
-            student.Dob = _student.Dob;
-            student.PhNo = _student.PhNo;
-            student.UpdatedOn = DateTime.Now;
-            student.Deleted = 0;
+            try
+            {
+                //var student = _repository.GetById(_student.Id).Result;
+                var student = _unitOfWork.GetRepository<Student>().GetById(_student.Id).Result;
+                student.Id = _student.Id;
+                student.Name = _student.Name;
+                student.Email = _student.Email;
+                student.Nrc = _student.Nrc;
+                student.Address = _student.Address;
+                if (_student.Image != null)
+                {
+                    student.Image = _student.Image;
+                }
+                student.Dob = _student.Dob;
+                student.PhNo = _student.PhNo;
+                student.UpdatedOn = DateTime.Now;
+                student.Deleted = 0;
 
-            //_repository.Update(student).Wait();
-            return _unitOfWork.GetRepository<Student>().Update(student).Result;
+                //_repository.Update(student).Wait();
+                var result = _unitOfWork.GetRepository<Student>().Update(student).Result;
+
+                await _unitOfWork.CommitAsync();
+
+                return new ResultModel<Object>()
+                {
+                    Data = student,
+                    IsSuccess = true,
+                    Message = "Data is updated successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            
         }
     }
 }

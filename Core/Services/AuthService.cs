@@ -33,10 +33,10 @@ namespace Core.Services
     public class AuthService : IAuthService
     {
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork<e_learningContext> _unitOfWork;
+        private readonly IUnitOfWork<Context> _unitOfWork;
 
         public AuthService(IMapper mapper,
-            IUnitOfWork<e_learningContext> unitOfWork){
+            IUnitOfWork<Context> unitOfWork){
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }

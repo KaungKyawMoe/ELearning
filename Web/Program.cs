@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<e_learningContext>(options =>
+builder.Services.AddDbContext<Context>(options =>
     options.UseMySql(builder.Configuration["DbConnections:MySqlConnection"],ServerVersion.Parse("5.0.7"))
 );
 

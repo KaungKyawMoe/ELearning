@@ -16,39 +16,59 @@ namespace Core.Services
     {
         Task<List<CourseDto>> GetCourses();
 
-        Task<bool> CreateCourse(CourseDto course);
+        Task<ResultModel<object>> CreateCourse(CourseDto course);
 
         Task<CourseDto> GetCourse(String id);
 
-        Task<bool> UpdateCourse(CourseDto _course);
+        Task<ResultModel<object>> UpdateCourse(CourseDto _course);
     }
     public class CourseService : ICourseService
     {
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork<e_learningContext> _unitOfWork;
+        private readonly IUnitOfWork<Context> _unitOfWork;
 
         public CourseService(
-            IUnitOfWork<e_learningContext> unitOfWork,
+            IUnitOfWork<Context> unitOfWork,
             IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public async Task<bool> CreateCourse(CourseDto _course)
+        public async Task<ResultModel<object>> CreateCourse(CourseDto _course)
         {
-            var course = new Course();
-            course.Id = Guid.NewGuid().ToString();
-            course.Name= _course.Name;
-            course.Description= _course.Description;
-            course.Fees= _course.Fees;
-            course.StartDate= _course.StartDate;
-            course.EndDate= _course.EndDate;
-            course.CreatedOn = DateTime.Now;
-            course.Deleted = 0;
+            try
+            {
+                var course = new Course();
+                course.Id = Guid.NewGuid().ToString();
+                course.Name = _course.Name;
+                course.Description = _course.Description;
+                if (_course.Image != null)
+                {
+                    course.Image = _course.Image;
+                }
+                course.Fees = _course.Fees;
+                course.StartDate = _course.StartDate;
+                course.EndDate = _course.EndDate;
+                course.CreatedOn = DateTime.Now;
+                course.Deleted = 0;
 
-            //_repository.Create(course).Wait();
-            return _unitOfWork.GetRepository<Course>().Create(course).Result;
+                //_repository.Create(course).Wait();
+                await _unitOfWork.GetRepository<Course>().Create(course);
+
+                await _unitOfWork.GetRepository<Course>().CommitAsync();
+
+                return new ResultModel<Object>()
+                {
+                    Data = course,
+                    IsSuccess = true,
+                    Message = "Data is created successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<List<CourseDto>> GetCourses()
@@ -67,20 +87,40 @@ namespace Core.Services
             return courseDto;
         }
 
-        public async Task<bool> UpdateCourse(CourseDto _course)
+        public async Task<ResultModel<object>> UpdateCourse(CourseDto _course)
         {
-            //var course = _repository.GetById(_course.Id).Result;
-            var course = _unitOfWork.GetRepository<Course>().GetById(_course.Id).Result;
-            course.Name = _course.Name;
-            course.Description = _course.Description;
-            course.Fees = _course.Fees;
-            course.StartDate = _course.StartDate;
-            course.EndDate = _course.EndDate;
-            course.UpdatedOn = DateTime.Now;
-            course.Deleted = 0;
+            try
+            {
+                //var course = _repository.GetById(_course.Id).Result;
+                var course = _unitOfWork.GetRepository<Course>().GetById(_course.Id).Result;
+                course.Name = _course.Name;
+                course.Description = _course.Description;
+                if(_course.Image != null)
+                {
+                    course.Image = _course.Image;
+                }
+                course.Fees = _course.Fees;
+                course.StartDate = _course.StartDate;
+                course.EndDate = _course.EndDate;
+                course.UpdatedOn = DateTime.Now;
+                course.Deleted = 0;
 
-            //_repository.Update(course).Wait();
-            return _unitOfWork.GetRepository<Course>().Update(course).Result;
+                //_repository.Update(course).Wait();
+                await _unitOfWork.GetRepository<Course>().Update(course);
+
+                await _unitOfWork.GetRepository<Course>().CommitAsync();
+
+                return new ResultModel<Object>()
+                {
+                    Data = course,
+                    IsSuccess = true,
+                    Message = "Data is updated successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

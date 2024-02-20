@@ -22,13 +22,12 @@ namespace Core.Models
         public string Email { get; set; } = null!;
 
         public byte[]? Image { get; set; }
-
         public string? ImageSrc { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public sbyte? Deleted { get; set; }
 
-        public IFormFile imageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
 
         public string UploadedImage { get; set; }
     }

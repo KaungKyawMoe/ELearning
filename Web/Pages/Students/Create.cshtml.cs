@@ -1,4 +1,5 @@
 using Core.Controllers;
+using Core.Entities;
 using Core.Models;
 using Core.Services;
 using Core.Utilities;
@@ -32,34 +33,49 @@ namespace Web.Pages.Students
             if(id != null)
             {
                 student = await _studentService.GetStudentById(id);
-                student.UploadedImage = "/images/" + Encoding.UTF8.GetString(student.Image);
+                if (student.Image != null)
+                {
+                    student.ImageSrc = "/images/" + Encoding.ASCII.GetString(student.Image);
+                }
             }
         }
 
         public async Task OnPostImageUploadAsync()
         {
-            await _appHandler.ImageUpload(student.imageFile);
+            await _appHandler.ImageUpload(student.ImageFile);
 
-            student.UploadedImage = "/images/" + student.imageFile.FileName;
+            student.UploadedImage = "/images/" + student.ImageFile.FileName;
 
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var imageFile = await _appHandler.ImageUpload(student.imageFile);
+            ResultModel<object> result = new ResultModel<object>();
 
-            student.ImageSrc = student.imageFile.FileName;
-
-            if(student.Id != null)
+            if (student.ImageFile != null)
             {
-                await _studentService.UpdateStudent(student);
+                var imageSrc = await _appHandler.ImageUpload(student.ImageFile);
+                student.Image = Encoding.ASCII.GetBytes(student.ImageFile.FileName);
+            }
+
+            if (student.Id != null)
+            {
+                result = await _studentService.UpdateStudent(student);
             }
             else
             {
-                await _studentService.CreateStudent(student);
+                result = await _studentService.CreateStudent(student);
             }
 
-            return RedirectToPage("/Students/Index");
+            if (result.IsSuccess)
+            {
+                return RedirectToPage("/Students/Index");
+            }
+            else
+            {
+                ViewData["Message"] = result.Message;
+                return Page();
+            }
         }
     }
 }

@@ -45,11 +45,11 @@ namespace Core.Extensions
                     options.Cookie.Name = "Authentication";
                 });
 
-            services.AddScoped<IUnitOfWork<e_learningContext>, UnitOfWork<e_learningContext>>();
+            services.AddScoped<IUnitOfWork<Context>, UnitOfWork<Context>>();
 
             services.AddSingleton<IAppHandler, AppHandler>();
 
-            services.AddScoped<DbContext, e_learningContext>();
+            services.AddScoped<DbContext, Context>();
 
             /*
             services.AddScoped<IRepository<Course>, Repository<Course>>();

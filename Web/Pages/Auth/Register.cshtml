@@ -4,8 +4,13 @@
 }
 
 <div class="d-flex align-items-center justify-content-center" style="height: 80vh;">
+
     <form asp-page="Register" method="post" class="w-50 px-4 py-4 site-bg-primary-color site-text-dark-color">
-        <div asp-validation-summary="All"></div>
+        @if (!String.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <span class="text-danger">@Model.ErrorMessage</span>
+        }
+        <div asp-validation-summary="ModelOnly"></div>
         <h3 class="text-center">Register</h3>
         <div class="my-1">
             <label class="form-label" asp-for="User.Name"></label>

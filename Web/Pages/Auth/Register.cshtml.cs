@@ -16,7 +16,6 @@ namespace Web.Pages.Auth
         [BindProperty]
         public UserDto User { get; set; }
 
-        [BindProperty]
         public string ErrorMessage { get;set; }
 
         [BindProperty]
@@ -28,17 +27,13 @@ namespace Web.Pages.Auth
 
         private readonly IConfiguration _configuration;
 
-        private readonly IOptions<Hashing> _hashingOptions;
-
         public RegisterModel(IAuthService authService,
             IPasswordHelper passwordHelper,
-            IConfiguration configuration,
-            IOptions<Hashing> hasingOptions)
+            IConfiguration configuration)
         {
             _authService = authService;
             _passwordHelper = passwordHelper;
             _configuration = configuration;
-            _hashingOptions = hasingOptions;
         }
 
         public async Task OnGet()
@@ -63,6 +58,14 @@ namespace Web.Pages.Auth
             if(isUserExist)
             {
                 ErrorMessage = "User is already exist on system";
+
+                var data = await _authService.GetAllRoles();
+
+                Roles = data.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id
+                }).ToList();
             }
             else
             {

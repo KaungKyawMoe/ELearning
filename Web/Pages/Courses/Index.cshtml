@@ -3,37 +3,52 @@
 @{
 }
 <a asp-page="/Courses/Create" >Create New Course</a>
-<section>
-    <div class="table-responsive">
-        @{
-            <table class="table table-striped caption-top">
-                <caption>List of Courses</caption>
-                <thead class="table-info">
+<div class="table-responsive py-2">
+    @{
+        <table class="table table-striped caption-top hover" id="courseTable" style="width:100%">
+            <caption>List of Courses</caption>
+            <thead class="table-info">
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Fees</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var data in Model.courseList)
+                {
                     <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Fees</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Actions</th>
+                        <td>@data.Name</td>
+                        <td>@data.Description</td>
+                        <td>@data.Fees MMK</td>
+                        <td>@data.StartDate</td>
+                        <td>@data.EndDate</td>
+                        <td><img src="@data.ImageSrc" alt="@data.Name" width="50" height="50" /></td>
+                        <td>
+                            <a asp-page="./Create" asp-route-id="@data.Id"> <span class=""></span>Edit</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var data in Model.courseList)
-                    {
-                        <tr>
-                            <td>@data.Name</td>
-                            <td>@data.Description</td>
-                            <td>@data.Fees MMK</td>
-                            <td>@data.StartDate</td>
-                            <td>@data.EndDate</td>
-                            <td>
-                            <a asp-page="./Edit" asp-route-id="@data.Id" > <span class=""></span>Edit</a> 
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-    </div>
-</section>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#courseTable').DataTable({
+
+                stateSave: true,
+
+                createdRow: function (row, data, index) {
+                    $('td',row).eq(1).addClass('highlight');
+                },
+            });
+        });
+    </script>
+}
