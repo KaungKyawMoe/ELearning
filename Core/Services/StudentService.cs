@@ -49,10 +49,7 @@ namespace Core.Services
                 student.Email = _student.Email;
                 student.Nrc = _student.Nrc;
                 student.Address = _student.Address;
-                if(_student.Image != null)
-                {
-                    student.Image = _student.Image;
-                }
+                student.Image = _student.Image ?? student.Image;
                 student.Dob = _student.Dob;
                 student.PhNo = _student.PhNo;
                 student.CreatedOn = DateTime.Now;
@@ -106,10 +103,7 @@ namespace Core.Services
                 student.Email = _student.Email;
                 student.Nrc = _student.Nrc;
                 student.Address = _student.Address;
-                if (_student.Image != null)
-                {
-                    student.Image = _student.Image;
-                }
+                student.Image = _student.Image ?? student.Image;
                 student.Dob = _student.Dob;
                 student.PhNo = _student.PhNo;
                 student.UpdatedOn = DateTime.Now;

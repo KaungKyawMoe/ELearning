@@ -1,10 +1,11 @@
 ﻿@page
 @model Web.Pages.Courses.CreateModel
 @{
+    var title = ViewData["title"];
 }
 
 <section class="mx-auto align-content-center w-50">
-    <h1 class="text-center">Create Course</h1>
+    <h1 class="text-center">@title</h1>
     @if (ViewData.ContainsKey("Message"))
     {
         <div class="text-danger text-center">@ViewData["Message"]</div>
@@ -55,7 +56,7 @@
         <div class="row my-2">
             <label class="col-sm-4">Image</label>
             <div class="col-sm-6">
-                <div class="btn-file-upload" data-value="@Model.course.ImageSrc"></div>
+                <div class="btn-file-upload" data-value="@Model.course?.ImageSrc"></div>
                 <input id="upload-file" type="file" class="form-control visually-hidden" asp-for="course.ImageFile"/>
                 <span asp-validation-for="course.ImageFile" class="text-danger"></span>
             </div>

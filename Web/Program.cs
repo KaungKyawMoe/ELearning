@@ -17,6 +17,12 @@ builder.Services.AddDbContext<Context>(options =>
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "XSRF-TOKEN";
+    options.SuppressXFrameOptionsHeader = false;
+});
+
 builder.Services.AddExtService();
 
 var app = builder.Build();

@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Text.Json;
 
 namespace Web.Pages.Students
 {
-    [Authorize]
+    //[Authorize]
     public class IndexModel : PageModel
     {
         public List<StudentDto> students { get; set; }
@@ -23,17 +24,35 @@ namespace Web.Pages.Students
 
         public async Task OnGet()
         {
-            var _students =  await _studentService.GetAllStudents();
+            //var _students =  await _studentService.GetAllStudents();
             
+            //_students.ToList().ForEach(student =>
+            //{
+            //    if (student.Image != null)
+            //    {
+            //        student.ImageSrc = "/images/"+ Encoding.UTF8.GetString(student.Image);
+            //    }
+            //});
+
+            students = new List<StudentDto>();
+        }
+
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OnPost()
+        {
+            var _students = await _studentService.GetAllStudents();
+
             _students.ToList().ForEach(student =>
             {
                 if (student.Image != null)
                 {
-                    student.ImageSrc = "/images/"+ Encoding.UTF8.GetString(student.Image);
+                    student.ImageSrc = "/images/" + Encoding.UTF8.GetString(student.Image);
                 }
             });
 
             students = _students.ToList();
+            return new JsonResult(students);
+            
         }
     }
 }

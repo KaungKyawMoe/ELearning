@@ -43,10 +43,7 @@ namespace Core.Services
                 course.Id = Guid.NewGuid().ToString();
                 course.Name = _course.Name;
                 course.Description = _course.Description;
-                if (_course.Image != null)
-                {
-                    course.Image = _course.Image;
-                }
+                course.Image = _course.Image ?? course.Image;
                 course.Fees = _course.Fees;
                 course.StartDate = _course.StartDate;
                 course.EndDate = _course.EndDate;
@@ -95,10 +92,7 @@ namespace Core.Services
                 var course = _unitOfWork.GetRepository<Course>().GetById(_course.Id).Result;
                 course.Name = _course.Name;
                 course.Description = _course.Description;
-                if(_course.Image != null)
-                {
-                    course.Image = _course.Image;
-                }
+                course.Image = _course.Image ?? course.Image;
                 course.Fees = _course.Fees;
                 course.StartDate = _course.StartDate;
                 course.EndDate = _course.EndDate;

@@ -1,4 +1,5 @@
 using Core.Controllers;
+using Core.Entities;
 using Core.Models;
 using Core.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +15,7 @@ namespace Web.Pages.Courses
         private readonly ICourseService _courseService;
 
 
-        public List<CourseDto> courseList;
+        public List<CourseDto> courseList = new List<CourseDto>();
 
         public IndexModel(ICourseService courseService)
         {
@@ -23,6 +24,18 @@ namespace Web.Pages.Courses
 
         public async Task OnGet()
         {
+            //var courseDtos = await _courseService.GetCourses();
+            //courseDtos.ForEach(x =>
+            //{
+            //    x.ImageSrc = $"/images/{Encoding.ASCII.GetString(x.Image)}";
+            //});
+
+            //courseList = courseDtos.ToList();
+        }
+
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OnPost()
+        {
             var courseDtos = await _courseService.GetCourses();
             courseDtos.ForEach(x =>
             {
@@ -30,6 +43,8 @@ namespace Web.Pages.Courses
             });
 
             courseList = courseDtos.ToList();
+            return new JsonResult(courseList);
+
         }
     }
 }

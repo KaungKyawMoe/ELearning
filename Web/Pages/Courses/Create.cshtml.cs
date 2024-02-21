@@ -13,7 +13,7 @@ namespace Web.Pages.Courses
     public class CreateModel : PageModel
     {
         [BindProperty]
-        public CourseDto course { get; set; }
+        public CourseDto course { get; set; } = new CourseDto();
 
         private readonly ICourseService _courseService;
         private readonly IAppHandler _appHandler;
@@ -26,7 +26,10 @@ namespace Web.Pages.Courses
 
         public async Task OnGet(String? id = null)
         {
-            if(id != null)
+
+            ViewData["title"] = id == null ? "Create Course" : "Edit Course";
+
+            if (id != null)
             {
                 course = await _courseService.GetCourse(id);
 
@@ -40,25 +43,34 @@ namespace Web.Pages.Courses
 
         public async Task<IActionResult> OnPostAsync()
         {
-            ResultModel<object> result = new ResultModel<object>();
-
-            if(course.ImageFile != null)
+            try
             {
-                var imageSrc = await _appHandler.ImageUpload(course.ImageFile);
-                course.Image = Encoding.ASCII.GetBytes(course.ImageFile.FileName);
-            }
+                ResultModel<object> result = new ResultModel<object>();
 
-            if (course != null && course.Id != null)
-            {
-                result = await _courseService.UpdateCourse(course);
-            }
-            else{
-                result = await _courseService.CreateCourse(course);
-            }
+                if (course.ImageFile != null)
+                {
+                    var imageSrc = await _appHandler.ImageUpload(course.ImageFile);
+                    course.Image = Encoding.ASCII.GetBytes(course.ImageFile.FileName);
+                }
 
-            if(!result.IsSuccess)
+                if (course != null && course.Id != null)
+                {
+                    result = await _courseService.UpdateCourse(course);
+                }
+                else
+                {
+                    result = await _courseService.CreateCourse(course);
+                }
+
+                if (!result.IsSuccess)
+                {
+                    ViewData["Message"] = result.Message;
+                    return Page();
+                }
+            }
+            catch(Exception ex)
             {
-                ViewData["Message"] = result.Message;
+                ViewData["Message"] = ex.Message;
                 return Page();
             }
 

@@ -112,3 +112,11 @@ td.highlight {
     background-size: contain;
     border: 1px dotted black;
 }
+
+.btn-create {
+    line-height: 50px !important;
+    background-color: #219ebc;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}

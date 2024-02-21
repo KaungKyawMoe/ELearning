@@ -2,7 +2,8 @@
 @model Web.Pages.Students.IndexModel
 @{
 }
-<a asp-page="/Students/Create">New Students</a>
+@Html.AntiForgeryToken()
+<a asp-page="/Students/Create" class="btn-create">New Student</a>
 <div class="table-responsive py-2">
     @{
         <table class="table table-striped hover" id="studentsTable" style="width:100%">
@@ -18,7 +19,7 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
+            @*<tbody>
                 @foreach (var item in Model.students)
                 {
                     <tr>
@@ -33,7 +34,7 @@
                     </tr>
                 }
 
-            </tbody>
+            </tbody>*@
         </table>
     }
     
@@ -42,14 +43,8 @@
 @section Scripts{
     <script>
         $(document).ready(function () {
-            $('#studentsTable').DataTable({
-                createdRow: function (row, data, index) {
-                    //if (data[5].replace(/[\$,]/g, '') * 1 > 150000) {
-                    //    $('td', row).eq(0).addClass('highlight');
-                    //}
-                    $('td',row).eq(0).addClass('highlight');
-                },
-            });
+            var url = "/Students";
+            InitializeDataTable("#studentsTable", url, "POST", ["name", "phNo", "email", "nrc", "dob", "address", "image", "action"], "/Students/Create?Id=");
         });
     </script>
 }

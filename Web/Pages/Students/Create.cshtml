@@ -1,80 +1,83 @@
 ﻿@page
 @model Web.Pages.Students.CreateModel
 @{
+    var title = ViewData["title"];
 }
-
-<form method="post" enctype="multipart/form-data" asp-page="create">
+<section class="mx-auto align-content-center w-50">
+    <h1 class="text-center">@title</h1>
     @if (ViewData.ContainsKey("Message"))
     {
         <div class="text-danger text-center">@ViewData["Message"]</div>
     }
-
-    <div asp-validation-summary="ModelOnly"></div>
-    <input asp-for="student.Id" hidden />
-    <div class="row my-2">
-        <label class="col-md-4 form-label" asp-for="student.Name"></label>
-        <div class="col-md-8">
-            <input type="text" asp-for="student.Name" class="form-control"/>
-            <span asp-validation-for="student.Name"></span>
+    <form method="post" enctype="multipart/form-data" asp-page="create">
+        <div asp-validation-summary="ModelOnly"></div>
+        <input asp-for="student.Id" hidden />
+        <div class="row my-2">
+            <label class="col-md-4 form-label" asp-for="student.Name"></label>
+            <div class="col-md-8">
+                <input type="text" asp-for="student.Name" class="form-control" />
+                <span asp-validation-for="student.Name"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="row my-2">
-        <label class="col-md-4 form-label" asp-for="student.Dob"></label>
-        <div class="col-md-8">
-            <input type="date" asp-for="student.Dob" class="form-control" />
-            <span asp-validation-for="student.Dob"></span>
+        <div class="row my-2">
+            <label class="col-md-4 form-label" asp-for="student.Dob"></label>
+            <div class="col-md-8">
+                <input type="date" asp-for="student.Dob" class="form-control" />
+                <span asp-validation-for="student.Dob"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="row my-2">
-        <label class="col-md-4 form-label" asp-for="student.Address"></label>
-        <div class="col-md-8">
-            <input type="text" asp-for="student.Address" class="form-control" />
-            <span asp-validation-for="student.Address"></span>
+        <div class="row my-2">
+            <label class="col-md-4 form-label" asp-for="student.Address"></label>
+            <div class="col-md-8">
+                <input type="text" asp-for="student.Address" class="form-control" />
+                <span asp-validation-for="student.Address"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="row my-2">
-        <label class="col-md-4 form-label" asp-for="student.Email"></label>
-        <div class="col-md-8">
-            <input type="email" asp-for="student.Email" class="form-control" />
-            <span asp-validation-for="student.Email"></span>
+        <div class="row my-2">
+            <label class="col-md-4 form-label" asp-for="student.Email"></label>
+            <div class="col-md-8">
+                <input type="email" asp-for="student.Email" class="form-control" />
+                <span asp-validation-for="student.Email"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="row my-2">
-        <label class="col-md-4 form-label" asp-for="student.PhNo"></label>
-        <div class="col-md-8">
-            <input type="text" asp-for="student.PhNo" class="form-control" />
-            <span asp-validation-for="student.PhNo"></span>
+        <div class="row my-2">
+            <label class="col-md-4 form-label" asp-for="student.PhNo"></label>
+            <div class="col-md-8">
+                <input type="text" asp-for="student.PhNo" class="form-control" />
+                <span asp-validation-for="student.PhNo"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="row my-2">
-        <label class="col-md-4 form-label" asp-for="student.Nrc"></label>
-        <div class="col-md-8">
-            <input type="text" asp-for="student.Nrc" class="form-control" />
-            <span asp-validation-for="student.Nrc"></span>
+        <div class="row my-2">
+            <label class="col-md-4 form-label" asp-for="student.Nrc"></label>
+            <div class="col-md-8">
+                <input type="text" asp-for="student.Nrc" class="form-control" />
+                <span asp-validation-for="student.Nrc"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="row my-2">
-        <label class="col-md-4 form-label" asp-for="student.ImageFile"></label>
-        <div class="col-md-4">
-            <div class="btn-file-upload" data-value="@Model.student.ImageSrc"></div>
-            <input id="upload-file" type="file" asp-for="student.ImageFile" class="visually-hidden" />
-            <span asp-validation-for="student.ImageFile"></span>
+        <div class="row my-2">
+            <label class="col-md-4 form-label" asp-for="student.ImageFile"></label>
+            <div class="col-md-4">
+                <div class="btn-file-upload" data-value="@Model.student?.ImageSrc"></div>
+                <input id="upload-file" type="file" asp-for="student.ImageFile" class="visually-hidden" />
+                <span asp-validation-for="student.ImageFile"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="row my-2">
-        <label class="col-md-4 form-label"></label>
-        <div class="col-md-4">
-            <input type="submit" value="Save" class="btn btn-light"/>
+        <div class="row my-2">
+            <label class="col-md-4 form-label"></label>
+            <div class="col-md-4">
+                <input type="submit" value="Save" class="btn btn-light" />
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+</section>
+
 
 @section Scripts{
     <script>

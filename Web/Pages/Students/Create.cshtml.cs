@@ -14,7 +14,7 @@ namespace Web.Pages.Students
     public class CreateModel : PageModel
     {
         [BindProperty]
-        public StudentDto student { get; set; }
+        public StudentDto student { get; set; } = new StudentDto();
 
         public string id { get; set; }
 
@@ -30,6 +30,8 @@ namespace Web.Pages.Students
 
         public async Task OnGet(String? id = null)
         {
+            ViewData["title"] = id == null ? "Create Student" : "Edit Student";
+
             if(id != null)
             {
                 student = await _studentService.GetStudentById(id);
