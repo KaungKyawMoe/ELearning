@@ -3,26 +3,35 @@
 @{
 }
 @Html.AntiForgeryToken()
-<a asp-page="/Students/Create" class="btn-create">New Student</a>
-<div class="table-responsive py-2">
-    @{
-        <table class="table table-striped hover" id="studentsTable" style="width:100%">
-            <thead class="table-light">
-                <tr>
-                    <th>Name</th>
-                    <th>Phno</th>
-                    <th>Email</th>
-                    <th>Nrc</th>
-                    <th>Dob</th>
-                    <th>Address</th>
-                    <th>Image</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            @*<tbody>
-                @foreach (var item in Model.students)
-                {
-                    <tr>
+<div class="content-header">
+    Students
+</div>
+<div class="row">
+    <div class="col-lg">
+        <div class="card">
+            <div class="card-header">
+                <a asp-page="/Students/Create" class="btn-create">New Student</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive py-2">
+                    @{
+                        <table class="table table-striped hover" id="studentsTable" style="width:100%">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phno</th>
+                                    <th>Email</th>
+                                    <th>Nrc</th>
+                                    <th>Dob</th>
+                                    <th>Address</th>
+                                    <th>Image</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            @*<tbody>
+                        @foreach (var item in Model.students)
+                        {
+                        <tr>
                         <td>@item.Name</td>
                         <td>@item.PhNo</td>
                         <td>@item.Email</td>
@@ -31,13 +40,17 @@
                         <td>@item.Address</td>
                         <td><img src="@item.ImageSrc" alt="@item.Name" width="50" height="50" /></td>
                         <td><a asp-page="./Create" asp-route-id="@item.Id" >Edit</a></td>
-                    </tr>
-                }
+                        </tr>
+                        }
 
-            </tbody>*@
-        </table>
-    }
-    
+                        </tbody>*@
+                        </table>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts{

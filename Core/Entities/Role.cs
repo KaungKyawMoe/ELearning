@@ -15,5 +15,7 @@ public partial class Role
 
     public sbyte? Deleted { get; set; }
 
+    public virtual ICollection<MenuPermission> MenuPermissions { get; set; } = new List<MenuPermission>();
+
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

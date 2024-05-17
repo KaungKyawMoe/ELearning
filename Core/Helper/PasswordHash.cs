@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder.Internal;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Configuration;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Core.Helper

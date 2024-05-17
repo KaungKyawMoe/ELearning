@@ -1,0 +1,82 @@
+﻿@page
+@model Web.Pages.PermissionManagement.IndexModel
+@{
+}
+@Html.AntiForgeryToken()
+<div class="content-header">
+    Menu Permissions
+</div>
+<div class="row">
+    <div class="col-lg">
+        <div class="card">
+            <div class="card-body">
+                <div class="container">
+                    <table class="table" id="permissionTable">
+                        <thead>
+                            <tr>
+                                <th>Menu Name</th>
+                                <th>Role Name</th>
+                                <th>Permission</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <button type="submit" id="btnUpdate">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var url = "/PermissionManagement";
+            InitializeDataTable("#permissionTable", url, "POST", ["menuName", "roleName", "permission"], "");
+
+            var $btn = $("#btnUpdate");
+            $btn.on('click',function(){
+
+                let updatedData = $(".updated");
+
+                let data = [];
+
+                $(updatedData).each(function(i,obj){
+
+                    let permissionId = $(obj).attr("data-id");
+                    let action = "";
+                    if ($(obj).is(":checked")) {
+                        action = $(obj).val()+",";
+                    }
+
+                    let permissionData = {
+                        "Id": permissionId,
+                        "Action": action
+                    }
+
+                    if(action !== ""){
+                        if (data.length > 0) {
+
+                            let index = data.findIndex(x => x.Id == permissionId);
+
+                            if (index >= 0) {
+                                data[index].Action += action;
+                            }
+                            else {
+                                data.push(permissionData);
+                            }
+                        }
+                        else {
+                            data.push(permissionData);
+                        }
+                    }
+
+                });
+
+                console.log(data);
+
+                var url = "/PermissionManagement/Index?handler=UpdateData";
+                ReloadDataTable(url, JSON.stringify(data));
+            });
+        });
+    </script>
+}

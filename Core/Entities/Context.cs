@@ -19,6 +19,10 @@ public partial class Context : DbContext
 
     public virtual DbSet<Course> Courses { get; set; }
 
+    public virtual DbSet<Menu> Menus { get; set; }
+
+    public virtual DbSet<MenuPermission> MenuPermissions { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<Student> Students { get; set; }
@@ -28,8 +32,12 @@ public partial class Context : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;database=e_learning;uid=root;pwd=codigo180", Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.6.26-mysql"));
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseMySql("server=localhost;database=e_learning;uid=root;pwd=codigo180", Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.6.26-mysql"));
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -120,6 +128,73 @@ public partial class Context : DbContext
             entity.Property(e => e.UpdatedOn)
                 .HasColumnType("datetime")
                 .HasColumnName("updated_on");
+        });
+
+        modelBuilder.Entity<Menu>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("menu");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(11)")
+                .HasColumnName("id");
+            entity.Property(e => e.CreatedOn)
+                .HasColumnType("datetime")
+                .HasColumnName("created_on");
+            entity.Property(e => e.Deleted)
+                .HasColumnType("bit(1)")
+                .HasColumnName("deleted");
+            entity.Property(e => e.Icon)
+                .HasMaxLength(300)
+                .HasColumnName("icon");
+            entity.Property(e => e.Link)
+                .HasMaxLength(200)
+                .HasColumnName("link");
+            entity.Property(e => e.Name)
+                .HasMaxLength(500)
+                .HasColumnName("name");
+            entity.Property(e => e.ParentMenuId)
+                .HasMaxLength(200)
+                .HasColumnName("parent_menu_id");
+            entity.Property(e => e.Sort)
+                .HasColumnType("tinyint(3)")
+                .HasColumnName("sort");
+            entity.Property(e => e.UpdatedOn)
+                .HasColumnType("datetime")
+                .HasColumnName("updated_on");
+        });
+
+        modelBuilder.Entity<MenuPermission>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("menu_permission");
+
+            entity.HasIndex(e => e.MenuId, "menu_permission_menu_idx");
+
+            entity.HasIndex(e => e.RoleId, "menu_permission_role_idx");
+
+            entity.Property(e => e.Id)
+                .HasMaxLength(200)
+                .HasColumnName("id");
+            entity.Property(e => e.Action)
+                .HasMaxLength(500)
+                .HasColumnName("action");
+            entity.Property(e => e.MenuId)
+                .HasColumnType("int(11)")
+                .HasColumnName("menu_id");
+            entity.Property(e => e.RoleId)
+                .HasMaxLength(200)
+                .HasColumnName("role_id");
+
+            entity.HasOne(d => d.Menu).WithMany(p => p.MenuPermissions)
+                .HasForeignKey(d => d.MenuId)
+                .HasConstraintName("menu_permission_menu");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.MenuPermissions)
+                .HasForeignKey(d => d.RoleId)
+                .HasConstraintName("menu_permission_role");
         });
 
         modelBuilder.Entity<Role>(entity =>

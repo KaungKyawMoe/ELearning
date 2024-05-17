@@ -1,11 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace UnitOfWork
 {
@@ -22,6 +19,8 @@ namespace UnitOfWork
         public Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
 
         public Task<int> CommitAsync();
+
+        public Task<IEnumerable<TEntity>> ExecuteStoredProcedure(string name,IDictionary<string,object> parameters);
     }
 
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
@@ -66,6 +65,65 @@ namespace UnitOfWork
         public async Task<int> CommitAsync()
         {
             return await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<TEntity>> ExecuteStoredProcedure(string name, IDictionary<string,object> parameters)
+        {
+            List<TEntity> entities = new List<TEntity>();
+
+            using(var con = this.dbContext.Database.GetDbConnection())
+            {
+                if(con.State == ConnectionState.Closed)
+                {
+                    con.Open();
+                }
+
+                var cmd = con.CreateCommand();
+                cmd.CommandText = name;
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                
+                foreach(var param in parameters)
+                {
+                    var sqlParam = cmd.CreateParameter();
+                    sqlParam.ParameterName = param.Key;
+                    sqlParam.Value = param.Value;
+
+                    cmd.Parameters.Add(sqlParam);
+                }
+
+                var result = cmd.ExecuteReader();
+                var dt = new DataTable();
+                dt.Load(result);
+
+                if(con.State != ConnectionState.Closed)
+                {
+                    con.Close();
+                }
+
+                return ToEntityList(dt);
+            }
+        }
+
+        public IEnumerable<TEntity> ToEntityList(DataTable dt)
+        {
+            IList<TEntity> entities = new List<TEntity>();
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                var entity = (TEntity) Activator.CreateInstance(typeof(TEntity));
+                var properties = typeof(TEntity).GetProperties();
+                foreach (var prop in properties)
+                {
+                    if (dr.Table.Columns.Contains(prop.Name.ToLower()))
+                    {
+                        prop.SetValue(entity, dr[prop.Name.ToLower()]);
+                    }
+                }
+
+                entities.Add(entity);
+            }
+
+            return entities.Any() ? entities : Enumerable.Empty<TEntity>();
         }
     }
 }

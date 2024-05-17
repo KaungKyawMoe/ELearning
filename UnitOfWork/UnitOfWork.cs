@@ -19,7 +19,7 @@ namespace UnitOfWork
 
     public class UnitOfWork<TContext> : IUnitOfWork<TContext> where TContext: DbContext
     {
-        protected readonly TContext _dbContext;
+        public TContext _dbContext;
         public UnitOfWork(TContext dbContext) {
             _dbContext= dbContext;
         }

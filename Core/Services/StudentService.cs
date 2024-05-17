@@ -2,11 +2,13 @@
 using Core.Entities;
 using Core.Models;
 using Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using UnitOfWork;
 
 namespace Core.Services
@@ -44,7 +46,7 @@ namespace Core.Services
             try
             {
                 Student student = new Student();
-                student.Id = _student.Id;
+                student.Id = Guid.NewGuid().ToString();
                 student.Name = _student.Name;
                 student.Email = _student.Email;
                 student.Nrc = _student.Nrc;
@@ -81,8 +83,44 @@ namespace Core.Services
         public async Task<List<StudentDto>> GetAllStudents()
         {
             //var students = _repository.GetAll();
-            var students = _unitOfWork.GetRepository<Student>().GetAll().Result;
-            return _mapper.Map<List<StudentDto>>(students);
+            //var students = _unitOfWork.GetRepository<Student>().GetAll().Result;
+            //return _mapper.Map<List<StudentDto>>(students);
+
+            Task task1 = Task.Run(() => UpdateStudentsLoop());
+            Task.WaitAll(task1);
+
+            return new List<StudentDto> { };
+        }
+
+        public async Task UpdateStudentsLoop()
+        {
+            try
+            {
+                using (var scope = new TransactionScope(
+                TransactionScopeOption.RequiresNew,
+                TransactionScopeAsyncFlowOption.Enabled
+                ))
+                {
+                    var students = await _unitOfWork.GetRepository<Student>().GetAll();
+                    foreach (var student in students)
+                    {
+                        student.PhNo = "3432422342";
+                        //await Task.Delay(1000);
+                    }
+
+                    await _unitOfWork.CommitAsync();
+                    scope.Complete();
+                }
+            }
+            catch(DbUpdateException e)
+            {
+
+            }
+            catch(Exception ex) 
+            {
+                Console.WriteLine($"UpdateStudentsLoop {ex.Message}");
+            }
+            
         }
 
         public async Task<StudentDto> GetStudentById(string id)

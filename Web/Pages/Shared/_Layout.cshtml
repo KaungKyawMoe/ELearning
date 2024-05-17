@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Web</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/lib/datatables/css/datatables.min.css" />
+@*    <link rel="stylesheet" href="~/lib/datatables/css/datatables.min.css" />*@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Web.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header class="sticky-top">
+<body class="content-wrapper">
+    @*<header class="sticky-top">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 site-bg-primary-color site-text-dark-color sticky-top">
             <div class="container">
                 <a class="navbar-brand site-text-dark-color" asp-area="" asp-page="/Index">Web</a>
@@ -23,6 +23,9 @@
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
                                 <a class="nav-link site-text-dark-color" asp-area="" asp-page="/Courses/Index">Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link site-text-dark-color" asp-area="" asp-page="/PermissionManagement/Index">Permissions</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link site-text-dark-color" asp-area="" asp-page="/Students/Index">Students</a>
@@ -53,9 +56,9 @@
                 </div>
             </div>
         </nav>
-    </header>
+    </header>*@
     <div class="container">
-        <main role="main" class="pb-3 container-card p-3">
+        <main role="main" class="pb-3 p-3">
             @RenderBody()
         </main>
     </div>
@@ -66,9 +69,9 @@
         </div>
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+@*    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/datatables/js/datatables.min.js"></script>
+    <script src="~/lib/datatables/js/datatables.min.js"></script>*@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)

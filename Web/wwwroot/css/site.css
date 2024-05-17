@@ -18,7 +18,7 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  /*margin-bottom: 60px;*/
 }
 
 .center-form{
@@ -43,7 +43,8 @@ body {
 
 .site-bg-brand-color {
     /*background-color: #ffb703;*/
-    background-color: #219ebc;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
 }
 
 .site-bg-brand-dark-color{
@@ -93,8 +94,8 @@ input[type="color"]:focus,
     outline: 0 none;
 }
 
-.container-card {
-    background-color:white;
+.content-wrapper {
+    background-color: #f4f6f9;
 }
 
 td.highlight {

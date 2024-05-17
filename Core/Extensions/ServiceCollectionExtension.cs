@@ -10,6 +10,7 @@ using UnitOfWork;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Core.Helper;
+using Hangfire;
 
 namespace Core.Extensions
 {
@@ -45,11 +46,11 @@ namespace Core.Extensions
                     options.Cookie.Name = "Authentication";
                 });
 
-            services.AddScoped<IUnitOfWork<Context>, UnitOfWork<Context>>();
+            //services.AddTransient<DbContext, Context>();
+
+            services.AddTransient<IUnitOfWork<Context>, UnitOfWork<Context>>();
 
             services.AddSingleton<IAppHandler, AppHandler>();
-
-            services.AddScoped<DbContext, Context>();
 
             /*
             services.AddScoped<IRepository<Course>, Repository<Course>>();
@@ -63,6 +64,9 @@ namespace Core.Extensions
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IPermissionService, PermissionService>();
+
+            services.AddScoped<IPermissionHelper, PermissionHelper>();
 
             return services;
         }

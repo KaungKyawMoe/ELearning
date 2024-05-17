@@ -45,7 +45,8 @@ namespace Web.Pages.Auth
                     var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.Name, userInfo.Name ?? ""),
-                        new Claim(ClaimTypes.Role, role.Name ?? "")
+                        new Claim(ClaimTypes.Role, role.Name ?? ""),
+                        new Claim("RoleId",role.Id ?? "")
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

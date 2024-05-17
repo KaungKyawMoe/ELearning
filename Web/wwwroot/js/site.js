@@ -4,10 +4,12 @@
 // Write your JavaScript code.
 
 var dt;
+var dataUrl;
 
 function InitializeDataTable(tableName, dataUrl, method, columns,actionUrl) {
 
     dt = $(tableName);
+    dataUrl = dataUrl;
 
     let columnData = [];
     for (let col = 0; col < columns.length; col++) {
@@ -35,7 +37,7 @@ function InitializeDataTable(tableName, dataUrl, method, columns,actionUrl) {
         }
     }
 
-    $(tableName).DataTable({
+    $(dt).DataTable({
         "ajax": {
             url: dataUrl,
             type: "POST",
@@ -43,9 +45,8 @@ function InitializeDataTable(tableName, dataUrl, method, columns,actionUrl) {
             headers: {
                 "XSRF-TOKEN": $('input:hidden[name="__RequestVerificationToken"]').val()
             },
-            contentType: "application/json; charset=utf-8",
+            //contentType: "application/json; charset=utf-8",
             dataSrc: function (json) {
-                console.log(json);
                 return json;
             },
             failure: function (response) {
@@ -54,6 +55,35 @@ function InitializeDataTable(tableName, dataUrl, method, columns,actionUrl) {
         },
         columns: columnData,
         processing: true,
-        serverSide: true
+        serverSide: true,
+        filter: true,
+        select: true
     });
+
+    $(dt).on('click', 'td', function () {
+        $(this).find("input").each(function (i,obj) {
+            $(obj).addClass("updated");
+        });
+    });
+}
+
+function ReloadDataTable(url,data) {
+    $.ajax({
+        url: url,
+        method: "POST",
+        dataType: "json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: {"model": data},
+        success: function (data) {
+            if (data.IsSuccess) {
+                $(dt).DataTable().ajax.reload();
+            }
+            else {
+                //console.log(data);
+            }
+        }
+    })
 }

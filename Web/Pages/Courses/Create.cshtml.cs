@@ -17,15 +17,25 @@ namespace Web.Pages.Courses
 
         private readonly ICourseService _courseService;
         private readonly IAppHandler _appHandler;
+        private readonly IPermissionHelper _permissionHelper;
 
         public CreateModel(ICourseService courseService,
-            IAppHandler appHandler){
+            IAppHandler appHandler,
+            IPermissionHelper permissionHelper)
+        {
             _courseService = courseService;
             _appHandler = appHandler;
+            _permissionHelper = permissionHelper;
         }
 
-        public async Task OnGet(String? id = null)
+        public async Task<IActionResult> OnGet(String? id = null)
         {
+            string roleId = Request.HttpContext.User.Claims.First(x => x.Type == "RoleId").Value.ToString();
+
+            if(!_permissionHelper.IsAuthorizedUser(roleId, "course", PermissionEnum.Create))
+            {
+                return RedirectToPage("/Courses/Index");
+            }
 
             ViewData["title"] = id == null ? "Create Course" : "Edit Course";
 
@@ -39,6 +49,7 @@ namespace Web.Pages.Courses
                 }
             }
             //course = new CourseDto();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()

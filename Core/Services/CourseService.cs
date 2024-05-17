@@ -2,12 +2,14 @@
 using Core.Entities;
 using Core.Models;
 using Core.Repositories;
+using Hangfire;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using UnitOfWork;
 
 namespace Core.Services
@@ -26,13 +28,16 @@ namespace Core.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork<Context> _unitOfWork;
+        private readonly IRecurringJobManager _recurringJob;
 
         public CourseService(
             IUnitOfWork<Context> unitOfWork,
-            IMapper mapper)
+            IMapper mapper,
+            IRecurringJobManager recurringJob)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _recurringJob = recurringJob;
         }
 
         public async Task<ResultModel<object>> CreateCourse(CourseDto _course)
@@ -70,10 +75,25 @@ namespace Core.Services
 
         public async Task<List<CourseDto>> GetCourses()
         {
+            _recurringJob.AddOrUpdate("courseJobs", () => GetStudentInfo(),Cron.Minutely);
             //var courses = _repository.GetAll();
-            var courses = _unitOfWork.GetRepository<Course>().GetAll().Result;
-            var courseDtos = _mapper.Map<List<CourseDto>>(courses);
-            return courseDtos;
+            //var courses = _unitOfWork.GetRepository<Course>().GetAll().Result;
+            //var courseDtos = _mapper.Map<List<CourseDto>>(courses);
+            //return courseDtos;
+
+            return new List<CourseDto>();
+
+        }
+
+        private async Task GetStudentInfo()
+        {
+            using (var scope = new TransactionScope(TransactionScopeOption.Required,
+                    TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var item = _unitOfWork.GetRepository<Student>().GetAll();
+                await Task.Delay(1000);
+                scope.Complete();
+            }
         }
 
         public async Task<CourseDto> GetCourse(String id)

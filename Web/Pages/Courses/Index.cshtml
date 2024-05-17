@@ -1,28 +1,38 @@
 ﻿@page
 @model Web.Pages.Courses.IndexModel
 @{
+    var title = ViewData["title"];
 }
 @Html.AntiForgeryToken()
-<a asp-page="/Courses/Create" class="btn-create">New Course</a>
-<div class="table-responsive py-2">
-    @{
-        <table class="table table-striped caption-top hover" id="coursesTable" style="width:100%">
-            <caption>List of Courses</caption>
-            <thead class="table-info">
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Fees</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Image</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            @*<tbody>
-                @foreach (var data in Model.courseList)
-                {
-                    <tr>
+<section class="content-header">
+    @title
+</section>
+<div class="row">
+    <div class="col-lg">
+        <div class="card">
+            <div class="card-header">
+                <a asp-page="/Courses/Create" class="btn-create">New Course</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    @{
+                        <table class="table table-striped caption-top hover" id="coursesTable" style="width:100%">
+                            <caption>List of Courses</caption>
+                            <thead class="table-info">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Fees</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Image</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            @*<tbody>
+                        @foreach (var data in Model.courseList)
+                        {
+                        <tr>
                         <td>@data.Name</td>
                         <td>@data.Description</td>
                         <td>@data.Fees MMK</td>
@@ -30,14 +40,20 @@
                         <td>@data.EndDate</td>
                         <td><img src="@data.ImageSrc" alt="@data.Name" width="50" height="50" /></td>
                         <td>
-                            <a asp-page="./Create" asp-route-id="@data.Id"> <span class=""></span>Edit</a>
+                        <a asp-page="./Create" asp-route-id="@data.Id"> <span class=""></span>Edit</a>
                         </td>
-                    </tr>
-                }
-            </tbody>*@
-        </table>
-    }
+                        </tr>
+                        }
+                        </tbody>*@
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 
 @section Scripts{
     <script>
